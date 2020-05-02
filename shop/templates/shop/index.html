@@ -7,17 +7,17 @@ margin-left:-4px;
 }
 
 .carousel-indicators .active {
-background-color: blue;
+background-color: black;
 }
 
 .col-md-3 img{
 
-max-width: 227px;
-height: 242px;
+width: 227px;
+height:200px; 
 }
 
 body .carousel-indicator li{
-background-color: blue;
+background-color: black;
 }
 
 body .carousel-indicators{
@@ -26,13 +26,14 @@ bottom: 0;
 
 body .carousel-control-prev-icon,
 body .carousel-control-next-icon{
-background-color: blue;
+background-color: black;
 }
 
 .carousel-control-prev,
 .carousel-control-next{
 top: auto;
 bottom: auto;
+padding-top: 250px;
 }
 body .no-padding{
 padding-left: 0,
@@ -56,7 +57,8 @@ border-color: #07617D;
   <!--Slideshow starts here -->
   {% for product, range, nSlides in allproducts %}
   <h2 class="my-4"> {{product.0.category}} </h2>
-  <div id="demo{{forloop.counter}}" class="carousel slide my-3" data-ride="carousel">
+  <div class="row">
+  <div id="demo{{forloop.counter}}" class="col carousel slide my-3" data-ride="carousel">
     <ul class="carousel-indicators">
       <li data-target="#demo{{forloop.counter}}" data-slide-to="0" class="active"></li>
 
@@ -76,8 +78,9 @@ border-color: #07617D;
             <img src='/media/{{i.image}}' class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title">{{i.product_name}}</h5>
-              <p class="card-text">{{i.desc}}</p>
+              <p class="card-text">{{i.desc|slice:"0:53"}}....</p>
               <button id='pr{{i.id}}' class="btn btn-primary cart">Add To Cart</button>
+              <a href="/shop/productview/{{i.id}}"  class="btn btn-primary cart mx-4">  Details</a>
             </div>
           </div>
         </div>
@@ -102,6 +105,7 @@ border-color: #07617D;
   <a class="carousel-control-next" href="#demo{{forloop.counter}}" data-slide="next">
     <span class="carousel-control-next-icon"></span>
   </a>
+  </div>
   {% endfor %}
 </div>
 {% endblock %}
@@ -112,7 +116,10 @@ border-color: #07617D;
   if (localStorage.getItem('cart') == null) {
     var cart = {};
   } else {
+
     cart = JSON.parse(localStorage.getItem('cart'));
+    document.getElementById('cart').innerHTML=Object.keys(cart).length;
+
 
   }
   // If the add to cart button is clicked, add/increment the item
@@ -125,8 +132,12 @@ border-color: #07617D;
     }
     console.log(cart);
     localStorage.setItem('cart', JSON.stringify(cart));
+    
+    document.getElementById('cart').innerHTML=Object.keys(cart).length;
+
 
   });
-
+  $('#popcart').popover()
+  document.getElementById("popcart").setAttribute('data-content','<h5>Cart</h5>');
 </script>
 {% endblock %}
