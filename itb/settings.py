@@ -59,7 +59,7 @@ ROOT_URLCONF = 'itb.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['itb/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
