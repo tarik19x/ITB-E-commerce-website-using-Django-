@@ -1,5 +1,5 @@
 {% extends 'shop/basic.html' %}
-{% block title%} Checkout - My Awesome Cart{% endblock %}
+{% block title%} Checkout -Inside the box{% endblock %}
 {% block css %}
 
 .btn-primary,
@@ -22,6 +22,9 @@ border-color: #07617D;
         <div class="my-4">
             <ul class="list-group" id="items">
             </ul>
+            <div class="alert alert-danger" role="alert">
+               <h5 style="margin-left: 215px;"> Don't Worry about the price, it's just BDT    <span class="mx-4" style="color: crimson;" id="totalPrice"></span> </h5>
+            </div>
         </div>
     </div>
 
@@ -84,6 +87,7 @@ border-color: #07617D;
     }
     console.log(cart);
     var sum = 0;
+    var totalPrice=0;
     if ($.isEmptyObject(cart)) {
         //if object is empty
         mystr = `<p><h4  style=" color: brown;">Your Box is empty, please add some items to your Box before checking out!</b></h4></p>`
@@ -92,15 +96,23 @@ border-color: #07617D;
         for (item in cart) {
             let name = cart[item][1];
             let qty = cart[item][0];
+            let itemPrice=cart[item][2];
             sum = sum + qty;
+            totalPrice=totalPrice+qty*itemPrice;
             mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
                     ${name}
                     <span class="badge badge-primary badge-pill">${qty}</span>
                 </li>`
+            //strprice=`<h1 style="color: brown;"> ${t} `
+
             $('#items').append(mystr);
+            //$('#totalPrice').append(strprice);
         }
+        
+
     }
     document.getElementById('cart').innerHTML = sum;
+    document.getElementById('totalPrice').innerHTML=totalPrice;
     $('#itemsJson').val(JSON.stringify(cart));
 
 
@@ -112,7 +124,7 @@ border-color: #07617D;
     document.location = "/shop";
     {% else %}
     alert('Please fill the Details Properly');
-    ocument.location = "/shop/checkout/";
+    //document.location = "/shop/checkout/";
 
     {% endif %}
 
