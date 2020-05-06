@@ -53,6 +53,7 @@
                 console.log(data)
                 data = JSON.parse(data);
                 updates = data[0];
+                console.log(updates)
                 if (updates.length > 0 & updates != {}) {
                     for (i = 0; i < updates.length; i++) {
                         let text = updates[i]['text'];

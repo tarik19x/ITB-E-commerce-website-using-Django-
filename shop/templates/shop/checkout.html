@@ -17,22 +17,24 @@ border-color: #07617D;
     <div class="col my-4">
 
 
-        <h2>Step 1 - My Awesome Cart Express Checkout - Review Your Cart Items</h2>
+        <h2>Step 1 - Your Box Items</h2>
 
         <div class="my-4">
             <ul class="list-group" id="items">
             </ul>
             <div class="alert alert-danger" role="alert">
-               <h5 style="margin-left: 215px;"> Don't Worry about the price, it's just BDT    <span class="mx-4" style="color: crimson;" id="totalPrice"></span> </h5>
+                <h5 style="margin-left: 215px;"> Don't Worry about the price, it's just BDT <span class="mx-4"
+                        style="color: crimson;" id="totalPrice"></span> </h5>
             </div>
         </div>
     </div>
-
+    <!-- <a href="/shop/payment" class="btn btn-primary cart mx-4"> Make Payment</a> -->
     <div class="col my-4">
         <h2>Step 2 - Enter Address & Other Details:</h2>
         {{ form.name_of_field.errors }}
         <form method="post" action="/shop/checkout/">{% csrf_token %}
             <input type="hidden" name="itemsJson" id="itemsJson">
+            <input type="hidden" name="ammount" id="ammount">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="inputname">Name</label>
@@ -45,7 +47,8 @@ border-color: #07617D;
             </div>
             <div class="form-group">
                 <label for="inputAddress">Address</label>
-                <input type="text" class="form-control" id="address1" name="address1" placeholder="1234 Main St" required>
+                <input type="text" class="form-control" id="address1" name="address1" placeholder="1234 Main St"
+                    required>
             </div>
             <div class="form-group">
                 <label for="inputAddress2">Address line 2</label>
@@ -71,10 +74,37 @@ border-color: #07617D;
                 <input type="tel" class="form-control" id="phone" name="phone" required>
             </div>
 
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle my-4"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Payment Options
+                </button>
+                <div class="dropdown-menu " aria-labelledby="btnGroupDrop1">
+                    <a class="dropdown-item" href="https://bkash.com/"><b style="color: brown;">Bkash(currently Unavailable)</b></a>
+                    <a class="dropdown-item" href="https://www.billdesk.com/pgidsk/pgmerc/amexcard/amex_card.jsp"><b
+                            style="color: rgb(6, 157, 245);">PayPal</b></a>
+                    <a class="dropdown-item" href="#"><b style="color:#07617D ;">Cash On delevary</b></a>
+                </div>
+            </div>
+            <br>
+            <div id="paypal-button-container"></div>
+
+            <!-- Include the PayPal JavaScript SDK -->
+            <script
+                src="https://www.paypal.com/sdk/js?client-id=AUd84VQ9WqbqjOIayRCj6FNVJDJCEblxpIed0eJ_RTgPkAyn8cHsKYkS0kgwpzfNDnXNFnrFOPzLZEdj&currency=USD"></script>
 
 
-            <button type="submit" class="btn btn-primary">Place Order</button>
+
+
+            <button type="submit" class="btn btn-primary my-4"><h4 class="my-1">Place Order</h4></button>
+
+
         </form>
+
+
+
+
+
     </div>
 </div>
 {% endblock %}
@@ -87,7 +117,7 @@ border-color: #07617D;
     }
     console.log(cart);
     var sum = 0;
-    var totalPrice=0;
+    var totalPrice = 0;
     if ($.isEmptyObject(cart)) {
         //if object is empty
         mystr = `<p><h4  style=" color: brown;">Your Box is empty, please add some items to your Box before checking out!</b></h4></p>`
@@ -96,9 +126,9 @@ border-color: #07617D;
         for (item in cart) {
             let name = cart[item][1];
             let qty = cart[item][0];
-            let itemPrice=cart[item][2];
+            let itemPrice = cart[item][2];
             sum = sum + qty;
-            totalPrice=totalPrice+qty*itemPrice;
+            totalPrice = totalPrice + qty * itemPrice;
             mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
                     ${name}
                     <span class="badge badge-primary badge-pill">${qty}</span>
@@ -108,11 +138,11 @@ border-color: #07617D;
             $('#items').append(mystr);
             //$('#totalPrice').append(strprice);
         }
-        
+
 
     }
     document.getElementById('cart').innerHTML = sum;
-    document.getElementById('totalPrice').innerHTML=totalPrice;
+    document.getElementById('totalPrice').innerHTML = totalPrice;
     $('#itemsJson').val(JSON.stringify(cart));
 
 
@@ -129,6 +159,32 @@ border-color: #07617D;
     {% endif %}
 
 
+    $('#ammount').val($('#totalPrice').html());
+
+    paypal.Buttons({
+        
+           
+        // Set up the transaction
+        createOrder: function (data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: totalPrice
+                    }
+                }]
+            });
+        },
+
+        // Finalize the transaction
+        onApprove: function (data, actions) {
+            return actions.order.capture().then(function (details) {
+                // Show a success message to the buyer
+                alert('Transaction completed by ' + details.payer.name.given_name + '!');
+            });
+        }
+
+
+    }).render('#paypal-button-container');
 
 
 

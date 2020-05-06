@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,include
 from .import views
 
 urlpatterns = [
@@ -8,7 +8,10 @@ urlpatterns = [
     path("tracker/",views.tracker,name="TrackingStatus"),
     path("search/",views.search,name="Search"),
     path("productview/<int:myid>",views.productview,name="Product"),
-    path("checkout/",views.checkout,name="Checkout")
+    path("checkout/",views.checkout,name="Checkout"),
+    path("payment/",views.payment,name="payment")
+    
+    
 
 
 ]
