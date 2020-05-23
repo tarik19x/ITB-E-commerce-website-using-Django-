@@ -1,5 +1,5 @@
 
-**************************** Website Link : http://insidethebox.pythonanywhere.com/shop/  ******************************
+#  Website Link : http://insidethebox.pythonanywhere.com/shop/  
 
 
 
