@@ -22,7 +22,7 @@
    
    
 #Payment System:
-   * PayPal(Used Sandbox PayPal Account)
+   * PayPal(Used Sandbox PayPal Account) Payment System
    
    
 #Hoasting Site:
